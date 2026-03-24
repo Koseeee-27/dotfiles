@@ -51,7 +51,7 @@ config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
 config.keys = {
   -- ペイン分割（画面を分ける）
-  { key = "\\", mods = "LEADER",      action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },  -- 左右に分割 (CTRL+a → \)
+  { key = "v", mods = "LEADER",       action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },  -- 左右に分割 (CTRL+a → v)
   { key = "-", mods = "LEADER",       action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },    -- 上下に分割 (CTRL+a → -)
 
   -- ペイン間の移動（Vimと同じhjklキー）
