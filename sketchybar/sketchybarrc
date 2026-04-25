@@ -1,0 +1,219 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/colors.sh"
+
+# ============================================================
+# Bar appearance
+# ============================================================
+sketchybar --bar height=32 \
+                 blur_radius=20 \
+                 position=top \
+                 sticky=on \
+                 padding_left=10 \
+                 padding_right=10 \
+                 color=$BAR_COLOR
+
+# ============================================================
+# Defaults
+# ============================================================
+sketchybar --default updates=on \
+                    icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
+                    icon.color=$ICON_COLOR \
+                    label.font="SF Pro:Semibold:13.0" \
+                    label.color=$LABEL_COLOR \
+                    padding_left=5 \
+                    padding_right=5 \
+                    icon.padding_left=4 \
+                    icon.padding_right=4 \
+                    label.padding_left=4 \
+                    label.padding_right=4
+
+# ============================================================
+# Aerospace workspace indicators
+# ============================================================
+SPACE_ITEMS=()
+for sid in $(aerospace list-workspaces --all); do
+    sketchybar --add item space.$sid left \
+               --subscribe space.$sid aerospace_workspace_change front_app_switched \
+               --set space.$sid \
+                    background.color=$BG_WORKSPACE \
+                    background.corner_radius=5 \
+                    background.height=24 \
+                    background.drawing=on \
+                    icon=$sid \
+                    icon.padding_left=8 \
+                    icon.padding_right=4 \
+                    label.font="sketchybar-app-font:Regular:14.0" \
+                    label.padding_left=2 \
+                    label.padding_right=8 \
+                    label.drawing=off \
+                    click_script="aerospace workspace $sid" \
+                    script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+    SPACE_ITEMS+=(space.$sid)
+done
+sketchybar --add bracket spaces "${SPACE_ITEMS[@]}" \
+           --set spaces background.drawing=off
+
+# ============================================================
+# Front app
+# ============================================================
+sketchybar --add item front_app left \
+           --set front_app \
+                background.color=$BG_FRONT \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                icon.drawing=on \
+                icon.font="sketchybar-app-font:Regular:16.0" \
+                icon.color=$COLOR_FRONT \
+                icon.padding_left=10 \
+                icon.padding_right=4 \
+                label.font="SF Pro:Bold:13.0" \
+                label.color=$LABEL_COLOR \
+                label.padding_left=4 \
+                label.padding_right=10 \
+                script="$CONFIG_DIR/plugins/front_app.sh" \
+           --subscribe front_app front_app_switched
+
+# ============================================================
+# 中央: 音楽情報（再生中のみ表示）
+# ============================================================
+sketchybar --add item music center \
+           --set music \
+                drawing=off \
+                update_freq=5 \
+                icon.font="JetBrainsMono Nerd Font:Bold:15.0" \
+                icon.color=$COLOR_MUSIC \
+                icon.padding_left=10 \
+                icon.padding_right=6 \
+                label.font="SF Pro:Medium:13.0" \
+                label.padding_right=10 \
+                background.color=$BG_MUSIC \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="osascript -e 'tell application \"Spotify\" to playpause' 2>/dev/null || osascript -e 'tell application \"Music\" to playpause' 2>/dev/null" \
+                script="$CONFIG_DIR/plugins/music.sh" \
+           --subscribe music media_change
+
+# ============================================================
+# 右側: システム情報グループ
+# ============================================================
+
+# CPU (クリックでActivity Monitor)
+sketchybar --add item cpu right \
+           --set cpu \
+                update_freq=5 \
+                icon=󰍛 \
+                icon.color=$COLOR_SYSTEM \
+                background.color=$BG_SYSTEM \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open -a 'Activity Monitor'" \
+                script="$CONFIG_DIR/plugins/cpu.sh"
+
+# GPU (クリックでActivity Monitor)
+sketchybar --add item gpu right \
+           --set gpu \
+                update_freq=5 \
+                icon=󰢮 \
+                icon.color=$COLOR_SYSTEM \
+                background.color=$BG_SYSTEM \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open -a 'Activity Monitor'" \
+                script="$CONFIG_DIR/plugins/gpu.sh"
+
+# Memory (クリックでActivity Monitor)
+sketchybar --add item memory right \
+           --set memory \
+                update_freq=10 \
+                icon=󰓅 \
+                icon.color=$COLOR_SYSTEM \
+                background.color=$BG_SYSTEM \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open -a 'Activity Monitor'" \
+                script="$CONFIG_DIR/plugins/memory.sh"
+
+# Thermal
+sketchybar --add item thermal right \
+           --set thermal \
+                update_freq=15 \
+                icon=󰔏 \
+                icon.color=$COLOR_SYSTEM \
+                background.color=$BG_SYSTEM \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                script="$CONFIG_DIR/plugins/temperature.sh"
+
+# Network I/O
+sketchybar --add item network right \
+           --set network \
+                update_freq=2 \
+                icon=󰖟 \
+                icon.color=$COLOR_SYSTEM \
+                background.color=$BG_SYSTEM \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open /System/Library/PreferencePanes/Network.prefPane" \
+                script="$CONFIG_DIR/plugins/network.sh"
+
+sketchybar --add bracket system cpu gpu memory thermal network \
+           --set system background.drawing=off
+
+# ============================================================
+# 右端: 時計・電池・音量グループ
+# ============================================================
+
+# Clock
+sketchybar --add item clock right \
+           --set clock \
+                update_freq=1 \
+                icon=󰥔 \
+                icon.color=$COLOR_STATUS \
+                background.color=$BG_STATUS \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                script="$CONFIG_DIR/plugins/clock.sh"
+
+# Battery (クリックでバッテリー設定)
+sketchybar --add item battery right \
+           --set battery \
+                update_freq=120 \
+                icon.color=$COLOR_STATUS \
+                background.color=$BG_STATUS \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open '/System/Library/PreferencePanes/Battery.prefPane'" \
+                script="$CONFIG_DIR/plugins/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
+# Volume (クリックでサウンド設定)
+sketchybar --add item volume right \
+           --set volume \
+                update_freq=5 \
+                icon=󰕾 \
+                icon.color=$COLOR_STATUS \
+                background.color=$BG_STATUS \
+                background.corner_radius=5 \
+                background.height=24 \
+                background.drawing=on \
+                click_script="open '/System/Library/PreferencePanes/Sound.prefPane'" \
+                script="$CONFIG_DIR/plugins/volume.sh" \
+           --subscribe volume volume_change
+
+sketchybar --add bracket status volume battery clock \
+           --set status background.drawing=off
+
+# ============================================================
+# Force update
+# ============================================================
+sketchybar --update
