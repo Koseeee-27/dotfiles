@@ -1,0 +1,221 @@
+# =============================================================================
+# AeroSpace config
+# Docs: https://nikitabobko.github.io/AeroSpace/guide
+# =============================================================================
+
+# 起動時にログイン項目として登録
+start-at-login = true
+
+# デフォルトレイアウト: タイル
+default-root-container-layout = 'tiles'
+
+# デフォルトの向き: モニターのアスペクト比に応じて自動
+default-root-container-orientation = 'auto'
+
+# レイアウト正規化（コンテナ構造を整理）
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# アコーディオンレイアウトのパディング
+accordion-padding = 30
+
+# フォーカス変更時のマウス追従
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# 起動時の追加コマンド
+after-login-command = []
+# JankyBorders を AeroSpace 起動時に自動起動
+after-startup-command = ['exec-and-forget borders']
+
+# ワークスペース切替時の外部通知（Sketchybar等を使う場合）
+exec-on-workspace-change = []
+
+
+# =============================================================================
+# Gaps（ウィンドウ間・外周の余白）
+# =============================================================================
+[gaps]
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 10
+outer.bottom = 10
+outer.top = 10
+outer.right = 10
+
+
+# =============================================================================
+# メインモード（通常時のキーバインド）
+# Modifier: alt
+# =============================================================================
+[mode.main.binding]
+
+# --- ワークスペース切替 ---
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+
+# 直前のWSへ戻る (back-and-forth)
+alt-backtick = 'workspace-back-and-forth'
+
+# --- ウィンドウを別WSへ送る ---
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+
+# --- フォーカス移動 (Vim風) ---
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# --- ウィンドウ入替（物理的に動かす） ---
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# --- モニター操作 ---
+alt-comma = 'focus-monitor --wrap-around prev'
+alt-period = 'focus-monitor --wrap-around next'
+alt-shift-comma = 'move-node-to-monitor --wrap-around prev'
+alt-shift-period = 'move-node-to-monitor --wrap-around next'
+
+# --- レイアウト切替 ---
+# tiles ⇄ accordion をトグル
+alt-slash = 'layout tiles accordion'
+# horizontal ⇄ vertical をトグル
+alt-m = 'layout horizontal vertical'
+# floating ⇄ tiling をトグル（個別ウィンドウ単位）
+alt-shift-space = 'layout floating tiling'
+
+# --- リサイズ ---
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
+
+# --- サービスモード突入 ---
+alt-shift-semicolon = 'mode service'
+
+
+# =============================================================================
+# サービスモード（特殊操作モード）
+# alt+shift+; で突入。esc で main モードに戻る。
+# 注意: このモードで「定義されていないキー」は素通しでアプリへ届きます。
+# =============================================================================
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']            # レイアウトをリセット
+f = ['layout floating tiling', 'mode main']            # フロート/タイル切替
+backspace = ['close-all-windows-but-current', 'mode main']
+
+# リサイズ（Vim風 hjkl。モード抜けないので連続で押せる）
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+
+# 兄弟コンテナと結合（複雑なレイアウトを作る時、shift付きで上書きを区別）
+shift-h = ['join-with left', 'mode main']
+shift-j = ['join-with down', 'mode main']
+shift-k = ['join-with up', 'mode main']
+shift-l = ['join-with right', 'mode main']
+
+
+# =============================================================================
+# アプリ自動振り分け（on-window-detected）
+# =============================================================================
+
+# --- WS1: Web ---
+[[on-window-detected]]
+if.app-id = 'company.thebrowser.dia'
+run = ['move-node-to-workspace 1']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = ['move-node-to-workspace 1']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = ['move-node-to-workspace 1']
+
+# --- WS2: Code ---
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = ['move-node-to-workspace 2']
+
+[[on-window-detected]]
+if.app-id = 'com.todesktop.230313mzl4w4u92'  # Cursor
+run = ['move-node-to-workspace 2']
+
+[[on-window-detected]]
+if.app-id = 'com.google.antigravity'
+run = ['move-node-to-workspace 2']
+
+# --- WS3: Terminal ---
+[[on-window-detected]]
+if.app-id = 'com.github.wez.wezterm'
+run = ['move-node-to-workspace 3']
+
+# --- WS4: Communication ---
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['move-node-to-workspace 4']
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = ['move-node-to-workspace 4']
+
+# --- WS5: Notes ---
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = ['move-node-to-workspace 5']
+
+[[on-window-detected]]
+if.app-id = 'notion.id'
+run = ['move-node-to-workspace 5']
+
+[[on-window-detected]]
+if.app-id = 'notion.id.calendar'
+run = ['move-node-to-workspace 5']
+
+
+# =============================================================================
+# フロート扱いするアプリ（タイル管理から外す）
+# =============================================================================
+
+# Zoom: バックグラウンド時のCPU高騰問題対策
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = ['layout floating']
+
+# 計算機: 小窓
+[[on-window-detected]]
+if.app-id = 'com.apple.calculator'
+run = ['layout floating']
+
+# システム設定: 小窓
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = ['layout floating']
+
+# Gemini: ホットキー小窓
+[[on-window-detected]]
+if.app-id = 'com.google.GeminiMacOS'
+run = ['layout floating']
+
+# DeepL: ホットキー小窓
+[[on-window-detected]]
+if.app-id = 'com.linguee.DeepLCopyTranslator'
+run = ['layout floating']

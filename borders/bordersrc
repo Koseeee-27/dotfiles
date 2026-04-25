@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# JankyBorders config
+# Docs: https://github.com/FelixKratz/JankyBorders
+
+options=(
+    style=round
+    width=5.0
+    hidpi=on
+    active_color=0xffff9e64   # フォーカス中: Tokyo Night orange
+    inactive_color=0x33494d64 # 非フォーカス: 薄いグレー
+    background_color=0x00000000
+)
+
+borders "${options[@]}"
