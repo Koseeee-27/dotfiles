@@ -33,6 +33,13 @@ config.window_frame = {
 config.window_background_gradient = {
   colors = { "262A32" },
 }
+-- ウィンドウ内のパディング（コンテンツとウィンドウ枠の間の余白）
+config.window_padding = {
+  left = 16,
+  right = 16,
+  top = 10,
+  bottom = 10,
+}
 -- タブバーの「+」ボタンを非表示にする
 config.show_new_tab_button_in_tab_bar = false
 -- タブ間の区切り線を非表示にする
@@ -40,6 +47,11 @@ config.colors = {
   tab_bar = {
     inactive_tab_edge = "none",
   },
+  -- コピーモード時のカーソル色（通常時より目立たせる）
+  copy_mode_active_highlight_bg = { Color = "#bf616a" },
+  copy_mode_active_highlight_fg = { Color = "#eceff4" },
+  copy_mode_inactive_highlight_bg = { Color = "#4c566a" },
+  copy_mode_inactive_highlight_fg = { Color = "#d8dee9" },
 }
 
 -- ==========================================================================
@@ -73,6 +85,57 @@ config.keys = {
   { key = "c", mods = "LEADER", action = wezterm.action.SpawnTab "CurrentPaneDomain" },    -- 新しいタブを作る
   { key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },           -- 次のタブへ
   { key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },          -- 前のタブへ
+
+  -- スクロールバック / コピーモード
+  { key = "/", mods = "CMD", action = wezterm.action.ActivateCopyMode },                    -- vim風キーで遡れるコピーモードへ
+
+  -- 透明度ローテーション
+  -- ] で次へ・[ で前へ。状態: 0.75 (デフォルト) ⇄ 1.0 (不透明) ⇄ 0.0 (透明)
+  { key = "]", mods = "LEADER", action = wezterm.action_callback(function(window)
+      local states = { 0.75, 1.0, 0.0 }
+      local overrides = window:get_config_overrides() or {}
+      local current = overrides.window_background_opacity or 0.75
+      local idx = 1
+      for i, v in ipairs(states) do
+        if math.abs(v - current) < 0.001 then idx = i; break end
+      end
+      local next_idx = (idx % #states) + 1
+      overrides.window_background_opacity = states[next_idx]
+      window:set_config_overrides(overrides)
+    end) },
+  { key = "[", mods = "LEADER", action = wezterm.action_callback(function(window)
+      local states = { 0.75, 1.0, 0.0 }
+      local overrides = window:get_config_overrides() or {}
+      local current = overrides.window_background_opacity or 0.75
+      local idx = 1
+      for i, v in ipairs(states) do
+        if math.abs(v - current) < 0.001 then idx = i; break end
+      end
+      local prev_idx = ((idx - 2) % #states) + 1
+      overrides.window_background_opacity = states[prev_idx]
+      window:set_config_overrides(overrides)
+    end) },
+}
+
+-- ==========================================================================
+-- コピーモード内のキーバインド拡張（vim風の検索 / / ? / n / N）
+-- ==========================================================================
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+table.insert(copy_mode, { key = '/', mods = 'NONE', action = wezterm.action.Search { CaseInSensitiveString = '' } })
+table.insert(copy_mode, { key = '?', mods = 'NONE', action = wezterm.action.Search { CaseInSensitiveString = '' } })
+table.insert(copy_mode, { key = 'n', mods = 'NONE', action = wezterm.action.CopyMode 'NextMatch' })
+table.insert(copy_mode, { key = 'n', mods = 'SHIFT', action = wezterm.action.CopyMode 'PriorMatch' })
+
+-- search_mode: Enter で確定してコピーモードに戻る
+local search_mode = wezterm.gui.default_key_tables().search_mode
+table.insert(search_mode, { key = 'Enter', mods = 'NONE', action = wezterm.action.Multiple {
+  wezterm.action.CopyMode 'AcceptPattern',
+  wezterm.action.ActivateCopyMode,
+} })
+
+config.key_tables = {
+  copy_mode = copy_mode,
+  search_mode = search_mode,
 }
 
 -- ==========================================================================
@@ -91,7 +154,37 @@ config.inactive_pane_hsb = {
 }
 
 -- タブバー右側にアクティブペインのディレクトリとプロセス名を表示
+-- コピーモード中は左ステータスに「COPY MODE」を強調表示
 wezterm.on("update-right-status", function(window, pane)
+  -- 左ステータス: コピーモード表示
+  local key_table = window:active_key_table()
+  if key_table == "copy_mode" then
+    window:set_left_status(wezterm.format({
+      { Background = { Color = "#bf616a" } },   -- 赤背景
+      { Foreground = { Color = "#eceff4" } },
+      { Attribute = { Intensity = "Bold" } },
+      { Text = "  COPY MODE  " },
+      { Background = { Color = "none" } },
+      { Foreground = { Color = "#bf616a" } },
+      { Text = "" },                            -- 三角形装飾（Nerd Font）
+      { Text = " " },
+    }))
+  elseif key_table == "search_mode" then
+    window:set_left_status(wezterm.format({
+      { Background = { Color = "#ebcb8b" } },   -- 黄背景
+      { Foreground = { Color = "#2e3440" } },
+      { Attribute = { Intensity = "Bold" } },
+      { Text = "  SEARCH  " },
+      { Background = { Color = "none" } },
+      { Foreground = { Color = "#ebcb8b" } },
+      { Text = "" },
+      { Text = " " },
+    }))
+  else
+    window:set_left_status("")
+  end
+
+  -- 右ステータス: cwd + process（既存）
   local cwd = ""
   local cwd_uri = pane:get_current_working_dir()
   if cwd_uri then
