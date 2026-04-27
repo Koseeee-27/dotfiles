@@ -113,7 +113,7 @@ alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
 
 # --- サービスモード突入 ---
-alt-shift-semicolon = 'mode service'
+alt-shift-semicolon = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=service', 'mode service']
 
 
 # =============================================================================
@@ -122,10 +122,10 @@ alt-shift-semicolon = 'mode service'
 # 注意: このモードで「定義されていないキー」は素通しでアプリへ届きます。
 # =============================================================================
 [mode.service.binding]
-esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main']            # レイアウトをリセット
-f = ['layout floating tiling', 'mode main']            # フロート/タイル切替
-backspace = ['close-all-windows-but-current', 'mode main']
+esc = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'reload-config', 'mode main']
+r = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'flatten-workspace-tree', 'mode main']
+f = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'layout floating tiling', 'mode main']
+backspace = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'close-all-windows-but-current', 'mode main']
 
 # リサイズ（Vim風 hjkl。モード抜けないので連続で押せる）
 h = 'resize width -50'
@@ -134,10 +134,10 @@ k = 'resize height -50'
 l = 'resize width +50'
 
 # 兄弟コンテナと結合（複雑なレイアウトを作る時、shift付きで上書きを区別）
-shift-h = ['join-with left', 'mode main']
-shift-j = ['join-with down', 'mode main']
-shift-k = ['join-with up', 'mode main']
-shift-l = ['join-with right', 'mode main']
+shift-h = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'join-with left', 'mode main']
+shift-j = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'join-with down', 'mode main']
+shift-k = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'join-with up', 'mode main']
+shift-l = ['exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main', 'join-with right', 'mode main']
 
 
 # =============================================================================
