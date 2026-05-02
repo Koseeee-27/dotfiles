@@ -19,10 +19,6 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # アコーディオンレイアウトのパディング
 accordion-padding = 30
 
-# フォーカス変更時のマウス追従
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
-
 # 起動時の追加コマンド
 after-login-command = []
 # JankyBorders を AeroSpace 起動時に自動起動
@@ -170,11 +166,6 @@ run = ['move-node-to-workspace 2']
 if.app-id = 'com.google.antigravity'
 run = ['move-node-to-workspace 2']
 
-# --- WS3: Terminal ---
-[[on-window-detected]]
-if.app-id = 'com.github.wez.wezterm'
-run = ['move-node-to-workspace 3']
-
 # --- WS4: Communication ---
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
@@ -230,4 +221,14 @@ run = ['layout floating']
 # DeepL: ホットキー小窓
 [[on-window-detected]]
 if.app-id = 'com.linguee.DeepLCopyTranslator'
+run = ['layout floating']
+
+# Spotify: 音楽プレイヤー
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = ['layout floating']
+
+# PowerPoint: 画面共有時のサブウィンドウ対策
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Powerpoint'
 run = ['layout floating']
