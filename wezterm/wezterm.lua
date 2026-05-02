@@ -18,7 +18,7 @@ config.use_ime = true
 -- カラーテーマ（Nord: 青みがかった落ち着いた配色）
 config.color_scheme = "nord"
 -- ウィンドウの透明度（0.0=完全透明 〜 1.0=不透明）
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.9
 -- 背景のぼかし効果（macOS専用）
 config.macos_window_background_blur = 20
 -- タイトルバーを非表示にして、リサイズだけ可能にする
@@ -62,6 +62,9 @@ config.colors = {
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
 config.keys = {
+  -- デフォルトの Alt+Enter (ToggleFullScreen) を無効化
+  { key = "Enter", mods = "ALT", action = wezterm.action.DisableDefaultAssignment },
+
   -- ペイン分割（画面を分ける）
   { key = "v", mods = "LEADER",       action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },  -- 左右に分割 (CTRL+a → v)
   { key = "-", mods = "LEADER",       action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },    -- 上下に分割 (CTRL+a → -)
@@ -90,11 +93,11 @@ config.keys = {
   { key = "/", mods = "CMD", action = wezterm.action.ActivateCopyMode },                    -- vim風キーで遡れるコピーモードへ
 
   -- 透明度ローテーション
-  -- ] で次へ・[ で前へ。状態: 0.75 (デフォルト) ⇄ 1.0 (不透明) ⇄ 0.0 (透明)
+  -- ] で次へ・[ で前へ。状態: 0.9 (デフォルト) ⇄ 1.0 (不透明) ⇄ 0.0 (透明)
   { key = "]", mods = "LEADER", action = wezterm.action_callback(function(window)
-      local states = { 0.75, 1.0, 0.0 }
+      local states = { 0.9, 1.0, 0.0 }
       local overrides = window:get_config_overrides() or {}
-      local current = overrides.window_background_opacity or 0.75
+      local current = overrides.window_background_opacity or 0.9
       local idx = 1
       for i, v in ipairs(states) do
         if math.abs(v - current) < 0.001 then idx = i; break end
@@ -104,9 +107,9 @@ config.keys = {
       window:set_config_overrides(overrides)
     end) },
   { key = "[", mods = "LEADER", action = wezterm.action_callback(function(window)
-      local states = { 0.75, 1.0, 0.0 }
+      local states = { 0.9, 1.0, 0.0 }
       local overrides = window:get_config_overrides() or {}
-      local current = overrides.window_background_opacity or 0.75
+      local current = overrides.window_background_opacity or 0.9
       local idx = 1
       for i, v in ipairs(states) do
         if math.abs(v - current) < 0.001 then idx = i; break end
