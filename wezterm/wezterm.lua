@@ -42,9 +42,15 @@ config.window_padding = {
 }
 -- タブバーの「+」ボタンを非表示にする
 config.show_new_tab_button_in_tab_bar = false
+-- fancy tab bar をオフにして retro tab bar を使う（タブの「✗」ボタンを消すため）
+config.use_fancy_tab_bar = false
+-- タブの最大幅を広げる（デフォルトは16文字。狭すぎてすぐ省略されるため）
+config.tab_max_width = 32
 -- タブ間の区切り線を非表示にする
 config.colors = {
   tab_bar = {
+    -- タブバー背景を完全透明にして、後ろのウィンドウ背景（#262A32 + 0.9 opacity + blur）を透過させる
+    background = "rgba(0, 0, 0, 0)",
     inactive_tab_edge = "none",
   },
   -- コピーモード時のカーソル色（通常時より目立たせる）
@@ -202,7 +208,12 @@ wezterm.on("update-right-status", function(window, pane)
   local process = pane:get_foreground_process_name() or ""
   process = process:gsub("^.*/", "")
 
+  -- タブで使われていたタイトル（シェルやコマンド名）も右ステータスに出す
+  local title = pane:get_title() or ""
+
   window:set_right_status(wezterm.format({
+    { Foreground = { Color = "#d8dee9" } },
+    { Text = " " .. title .. " " },
     { Foreground = { Color = "#88c0d0" } },
     { Text = " " .. process .. " " },
     { Foreground = { Color = "#a3be8c" } },
@@ -218,6 +229,11 @@ end)
 
 -- タブの見た目をカスタマイズ（アクティブなタブを金色にする）
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+  -- タブが1つしかないときはタブを描画しない（右ステータスは残す）
+  if #tabs <= 1 then
+    return ""
+  end
+
   local background = "#5c6d74"       -- 非アクティブタブの背景色（グレー）
   local foreground = "#FFFFFF"
   local edge_background = "none"
@@ -227,7 +243,12 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
     foreground = "#FFFFFF"
   end
   local edge_foreground = background
-  local title = "   " .. wezterm.truncate_right(tab.active_pane.title, max_width - 1) .. "   "
+
+  -- タイトルがパス風のときは末尾2セグメント（親/カレント）だけ出す
+  -- 例: "/Users/foo/podlog-workspace/frontend" → "podlog-workspace/frontend"
+  local raw = tab.active_pane.title or ""
+  local short = raw:match("[^/]+/[^/]+$") or raw
+  local title = "   " .. wezterm.truncate_right(short, max_width - 1) .. "   "
 
   return {
     { Background = { Color = edge_background } },
