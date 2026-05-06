@@ -33,29 +33,23 @@ sketchybar --default updates=on \
 
 # ============================================================
 # Aerospace workspace indicators
+#   AeroSpace が起動するより先に sketchybar が立ち上がっても表示が壊れないよう、
+#   ワークスペースアイテムは spaces.sh が動的に追加する。
+#   トリガー:
+#     - sketchybar 起動直後 (aerospace_init)
+#     - aerospace の after-startup-command による通知
+#     - aerospace_workspace_change イベント
 # ============================================================
-SPACE_ITEMS=()
-for sid in $(aerospace list-workspaces --all); do
-    sketchybar --add item space.$sid left \
-               --subscribe space.$sid aerospace_workspace_change front_app_switched \
-               --set space.$sid \
-                    background.color=$BG_WORKSPACE \
-                    background.corner_radius=5 \
-                    background.height=24 \
-                    background.drawing=on \
-                    icon=$sid \
-                    icon.padding_left=8 \
-                    icon.padding_right=4 \
-                    label.font="sketchybar-app-font:Regular:14.0" \
-                    label.padding_left=2 \
-                    label.padding_right=8 \
-                    label.drawing=off \
-                    click_script="aerospace workspace $sid" \
-                    script="$CONFIG_DIR/plugins/aerospace.sh $sid"
-    SPACE_ITEMS+=(space.$sid)
-done
-sketchybar --add bracket spaces "${SPACE_ITEMS[@]}" \
-           --set spaces background.drawing=off
+sketchybar --add event aerospace_init
+
+sketchybar --add item spaces_manager left \
+           --set spaces_manager \
+                drawing=off \
+                script="$CONFIG_DIR/plugins/spaces.sh" \
+           --subscribe spaces_manager aerospace_init
+
+# 起動時に1回だけ同期試行（AeroSpace 未起動なら spaces.sh は no-op で抜ける）
+sketchybar --trigger aerospace_init
 
 # ============================================================
 # Aerospace mode indicator (service mode 中のみ表示)

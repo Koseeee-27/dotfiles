@@ -1,1 +1,14 @@
 .DS_Store
+
+# OS / editor
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# ローカル専用設定（必要に応じて利用）
+*.local
+*.private
+.env
+.env.*
+secrets/

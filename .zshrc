@@ -134,5 +134,5 @@ function y() {
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Added by Antigravity
-export PATH="/Users/kobayashikosei/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 ulimit -n 65536
