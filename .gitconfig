@@ -3,3 +3,13 @@
 	email = kosekose2741@gmail.com
 [init]
 	defaultBranch = main
+[transfer]
+	fsckObjects = true
+[fetch]
+	fsckObjects = true
+[receive]
+	fsckObjects = true
+[push]
+	default = simple
+[pull]
+	ff = only

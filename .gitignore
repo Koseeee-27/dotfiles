@@ -12,3 +12,28 @@
 .env
 .env.*
 secrets/
+
+# シェル / REPL の履歴（うっかり混入を防ぐ）
+.zsh_history
+.bash_history
+.python_history
+.node_repl_history
+.lesshst
+.viminfo
+.wget-hsts
+
+# 認証情報・鍵ファイル
+.ssh/
+.aws/
+.gnupg/
+.netrc
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# クラウド/CLI ツールの認証
+.config/gh/
+.config/gcloud/
+.kube/config
+.docker/config.json
