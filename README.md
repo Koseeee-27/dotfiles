@@ -15,6 +15,7 @@ macOS 用の個人設定ファイル群。シンボリックリンクで `$HOME`
 | `raycast-scripts/` | [Raycast](https://www.raycast.com/) 用 Script Commands |
 | `sketchybar/` | [SketchyBar](https://github.com/FelixKratz/SketchyBar) のステータスバー設定 |
 | `wezterm/wezterm.lua` | [WezTerm](https://wezfurlong.org/wezterm/) のターミナル設定 |
+| `yazi/` | [Yazi](https://yazi-rs.github.io/) のファイルマネージャ設定（opener / keymap） |
 
 ## 前提ツール
 
@@ -50,6 +51,7 @@ ln -s ~/dotfiles/karabiner   ~/.config/karabiner
 ln -s ~/dotfiles/nvim        ~/.config/nvim
 ln -s ~/dotfiles/sketchybar  ~/.config/sketchybar
 ln -s ~/dotfiles/wezterm     ~/.config/wezterm
+ln -s ~/dotfiles/yazi        ~/.config/yazi
 ```
 
 ## ライセンス

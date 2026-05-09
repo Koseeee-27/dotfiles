@@ -1,0 +1,23 @@
+[opener]
+edit = [
+  { run = 'nvim "$@"', desc = "nvim", block = true, for = "unix" },
+]
+open = [
+  { run = '/usr/bin/open "$@"', desc = "macOS既定アプリ", orphan = true },
+]
+reveal = [
+  { run = '/usr/bin/open -R "$@"', desc = "Finder で表示", orphan = true },
+]
+code = [
+  { run = 'code "$@"', desc = "VS Code", orphan = true, for = "macos" },
+]
+cursor = [
+  { run = 'cursor "$@"', desc = "Cursor", orphan = true, for = "macos" },
+]
+
+[open]
+prepend_rules = [
+  { name = "*.md",            use = ["edit", "code", "cursor", "open", "reveal"] },
+  { name = "*.{ts,tsx,js,jsx,mjs,cjs,py,go,rs,rb,lua,sh,zsh,toml,yaml,yml,json,html,css,scss}", use = ["edit", "code", "cursor", "reveal"] },
+  { mime = "text/*",          use = ["edit", "code", "cursor", "reveal"] },
+]
