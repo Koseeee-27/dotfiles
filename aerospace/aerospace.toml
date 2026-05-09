@@ -233,6 +233,11 @@ run = ['layout floating']
 if.app-id = 'com.spotify.client'
 run = ['layout floating']
 
+# Typeless: ホットキー小窓
+[[on-window-detected]]
+if.app-id = 'now.typeless.desktop'
+run = ['layout floating']
+
 # PowerPoint: 画面共有時のサブウィンドウ対策
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Powerpoint'
