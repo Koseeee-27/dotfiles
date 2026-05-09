@@ -7,3 +7,6 @@ vim.g.maplocalleader = " "
 
 -- スペルチェックを無効化（日本語で誤検知するため）
 vim.opt.spell = false
+
+-- Copilot などの AI 補完を補完メニューに混ぜず、ゴーストテキスト方式で表示する
+vim.g.ai_cmp = false
