@@ -1,28 +1,26 @@
 #!/usr/bin/env bash
 
-# Tokyo Night palette
-export BAR_COLOR=0x401a1b26
-export ITEM_BG_COLOR=0xff24283b
-export ICON_COLOR=0xffc0caf5
-export LABEL_COLOR=0xffc0caf5
-export ACCENT_COLOR=0xff769ff0
-export ACTIVE_FG_COLOR=0xff1a1b26
+# ============================================================
+# Flat / minimal palette
+#   macOS デフォルトメニューバーに寄せた白系単色の構成。
+#   アイテムごとの背景ピルやカテゴリ別アクセントは原則使わない。
+#   例外: active workspace のみ薄いピル背景を残す（aerospace.sh 参照）。
+# ============================================================
 
-# カテゴリ別アクセント（青系のみで濃淡）
-export COLOR_WORKSPACE=0xff7aa2f7   # 鮮やかな青（workspace用、主アクセント）
-export COLOR_FRONT=0xff7aa2f7       # 同上（フロントアプリ）
-export COLOR_MUSIC=0xff7dcfff       # 明るい水色（音楽）
-export COLOR_SYSTEM=0xff2ac3de      # ティール（システム情報）
-export COLOR_STATUS=0xff89ddff      # スカイブルー（ステータス）
+# バー本体: ごく薄い下塗り（約19%黒）+ blur で macOS 純正風
+export BAR_COLOR=0x30000000
 
-# カテゴリ別ピル背景（より差をつけたバリエーション）
-export BG_WORKSPACE=0xff1f2335      # 標準ダークネイビー
-export BG_FRONT=0xff2c4878          # 鮮やかな青
-export BG_MUSIC=0xff0e4a5d          # 深いティール
-export BG_SYSTEM=0xff134048         # 深い緑寄りティール
-export BG_STATUS=0xff2a5378         # 鮮やかなスカイブルー
+# テキスト/アイコンの基本色（純白でハッキリ）
+export ICON_COLOR=0xffffffff
+export LABEL_COLOR=0xffffffff
 
-# 警告・危険色
-export WARN_COLOR=0xffe0af68     # 黄
-export DANGER_COLOR=0xfff7768e   # 赤
-export OK_COLOR=0xff9ece6a       # 緑（任意で）
+# active workspace 強調色
+export ACTIVE_FG=0xffffffff
+export ACTIVE_BG=0x66ffffff   # 半透明白の薄いピル（明瞭に）
+
+# 非アクティブ（読める範囲で沈める）
+export INACTIVE_FG=0xffc8ccd4
+
+# 状態色（必要時のみ使う）
+export WARN_COLOR=0xffe0af68
+export DANGER_COLOR=0xfff7768e

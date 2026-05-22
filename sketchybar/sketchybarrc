@@ -4,41 +4,40 @@ source "$CONFIG_DIR/colors.sh"
 
 # ============================================================
 # Bar appearance
+#   macOS デフォルトメニューバーに寄せたフラットな構成。
 # ============================================================
-sketchybar --bar height=32 \
-                 blur_radius=20 \
+sketchybar --bar height=28 \
+                 blur_radius=70 \
                  position=top \
                  sticky=on \
-                 padding_left=10 \
-                 padding_right=10 \
+                 padding_left=8 \
+                 padding_right=8 \
                  color=$BAR_COLOR
 
 # ============================================================
 # Defaults
+#   アイコン・ラベル共に Apple 純正の SF Pro を使用（SF Symbols 描画用）。
 # ============================================================
 sketchybar --add event aerospace_workspace_change
 sketchybar --add event aerospace_mode_change
+sketchybar --add event input_method_change
 
 sketchybar --default updates=on \
-                    icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
+                    icon.font="SF Pro:Bold:14.0" \
                     icon.color=$ICON_COLOR \
                     label.font="SF Pro:Semibold:13.0" \
                     label.color=$LABEL_COLOR \
-                    padding_left=5 \
-                    padding_right=5 \
+                    padding_left=4 \
+                    padding_right=4 \
                     icon.padding_left=4 \
                     icon.padding_right=4 \
                     label.padding_left=4 \
-                    label.padding_right=4
+                    label.padding_right=4 \
+                    background.drawing=off
 
 # ============================================================
 # Aerospace workspace indicators
-#   AeroSpace が起動するより先に sketchybar が立ち上がっても表示が壊れないよう、
-#   ワークスペースアイテムは spaces.sh が動的に追加する。
-#   トリガー:
-#     - sketchybar 起動直後 (aerospace_init)
-#     - aerospace の after-startup-command による通知
-#     - aerospace_workspace_change イベント
+#   spaces.sh が動的に space.X を追加する。
 # ============================================================
 sketchybar --add event aerospace_init
 
@@ -46,9 +45,8 @@ sketchybar --add item spaces_manager left \
            --set spaces_manager \
                 drawing=off \
                 script="$CONFIG_DIR/plugins/spaces.sh" \
-           --subscribe spaces_manager aerospace_init
+           --subscribe spaces_manager aerospace_init aerospace_workspace_change
 
-# 起動時に1回だけ同期試行（AeroSpace 未起動なら spaces.sh は no-op で抜ける）
 sketchybar --trigger aerospace_init
 
 # ============================================================
@@ -58,14 +56,14 @@ sketchybar --add item aerospace_mode left \
            --set aerospace_mode \
                 drawing=off \
                 background.color=0xffbf616a \
-                background.corner_radius=5 \
-                background.height=24 \
+                background.corner_radius=4 \
+                background.height=20 \
                 background.drawing=on \
                 icon.drawing=off \
-                label.font="SF Pro:Bold:13.0" \
+                label.font="SF Pro:Bold:12.0" \
                 label.color=0xffeceff4 \
-                label.padding_left=10 \
-                label.padding_right=10 \
+                label.padding_left=8 \
+                label.padding_right=8 \
                 script="$CONFIG_DIR/plugins/aerospace_mode.sh" \
            --subscribe aerospace_mode aerospace_mode_change
 
@@ -75,19 +73,15 @@ sketchybar --add item aerospace_mode left \
 sketchybar --add item front_app left \
            --set front_app \
                 update_freq=3 \
-                background.color=$BG_FRONT \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
                 icon.drawing=on \
                 icon.font="sketchybar-app-font:Regular:16.0" \
-                icon.color=$COLOR_FRONT \
-                icon.padding_left=10 \
+                icon.color=$LABEL_COLOR \
+                icon.padding_left=8 \
                 icon.padding_right=4 \
-                label.font="SF Pro:Bold:13.0" \
+                label.font="SF Pro:Semibold:13.0" \
                 label.color=$LABEL_COLOR \
                 label.padding_left=4 \
-                label.padding_right=10 \
+                label.padding_right=4 \
                 script="$CONFIG_DIR/plugins/front_app.sh" \
            --subscribe front_app front_app_switched aerospace_workspace_change
 
@@ -98,138 +92,79 @@ sketchybar --add item music center \
            --set music \
                 drawing=off \
                 update_freq=5 \
-                icon.font="JetBrainsMono Nerd Font:Bold:15.0" \
-                icon.color=$COLOR_MUSIC \
-                icon.padding_left=10 \
-                icon.padding_right=6 \
+                icon.font="SF Pro:Bold:14.0" \
+                icon.color=$ICON_COLOR \
+                icon.padding_right=4 \
                 label.font="SF Pro:Medium:13.0" \
-                label.padding_right=10 \
-                background.color=$BG_MUSIC \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
+                label.color=$LABEL_COLOR \
                 click_script="osascript -e 'tell application \"Spotify\" to playpause' 2>/dev/null || osascript -e 'tell application \"Music\" to playpause' 2>/dev/null" \
                 script="$CONFIG_DIR/plugins/music.sh" \
            --subscribe music media_change
 
 # ============================================================
-# 右側: システム情報グループ
+# 右側: IME → Wi-Fi → Volume → Battery → Clock
+#   全てフラット（背景なし）。アイコンは SF Symbols で macOS 標準に寄せる。
+#   right セクションは最初に add したものが画面左端に並ぶ。
 # ============================================================
 
-# CPU (クリックでActivity Monitor)
-sketchybar --add item cpu right \
-           --set cpu \
-                update_freq=5 \
-                icon=󰍛 \
-                icon.color=$COLOR_SYSTEM \
-                background.color=$BG_SYSTEM \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open -a 'Activity Monitor'" \
-                script="$CONFIG_DIR/plugins/cpu.sh"
-
-# GPU (クリックでActivity Monitor)
-sketchybar --add item gpu right \
-           --set gpu \
-                update_freq=5 \
-                icon=󰢮 \
-                icon.color=$COLOR_SYSTEM \
-                background.color=$BG_SYSTEM \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open -a 'Activity Monitor'" \
-                script="$CONFIG_DIR/plugins/gpu.sh"
-
-# Memory (クリックでActivity Monitor)
-sketchybar --add item memory right \
-           --set memory \
+# IME (日英入力状態)
+#   watcher が input_method_change イベントを即時発火する。
+#   フォールバックとして update_freq=10 のポーリングも残す。
+sketchybar --add item input_method right \
+           --set input_method \
                 update_freq=10 \
-                icon=󰓅 \
-                icon.color=$COLOR_SYSTEM \
-                background.color=$BG_SYSTEM \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open -a 'Activity Monitor'" \
-                script="$CONFIG_DIR/plugins/memory.sh"
+                icon.drawing=off \
+                label.font="SF Pro:Bold:13.0" \
+                label.color=$LABEL_COLOR \
+                script="$CONFIG_DIR/plugins/input_method.sh" \
+           --subscribe input_method input_method_change
 
-# Thermal
-sketchybar --add item thermal right \
-           --set thermal \
-                update_freq=15 \
-                icon=󰔏 \
-                icon.color=$COLOR_SYSTEM \
-                background.color=$BG_SYSTEM \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                script="$CONFIG_DIR/plugins/temperature.sh"
+# Wi-Fi
+sketchybar --add item wifi right \
+           --set wifi \
+                update_freq=10 \
+                icon.font="SF Pro:Bold:15.0" \
+                click_script="open '/System/Library/PreferencePanes/Network.prefPane'" \
+                script="$CONFIG_DIR/plugins/wifi.sh" \
+           --subscribe wifi system_woke wifi_change
 
-# Network I/O
-sketchybar --add item network right \
-           --set network \
-                update_freq=2 \
-                icon=󰖟 \
-                icon.color=$COLOR_SYSTEM \
-                background.color=$BG_SYSTEM \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open /System/Library/PreferencePanes/Network.prefPane" \
-                script="$CONFIG_DIR/plugins/network.sh"
+# Volume
+sketchybar --add item volume right \
+           --set volume \
+                update_freq=5 \
+                icon.font="SF Pro:Bold:15.0" \
+                click_script="open '/System/Library/PreferencePanes/Sound.prefPane'" \
+                script="$CONFIG_DIR/plugins/volume.sh" \
+           --subscribe volume volume_change
 
-sketchybar --add bracket system cpu gpu memory thermal network \
-           --set system background.drawing=off
-
-# ============================================================
-# 右端: 時計・電池・音量グループ
-# ============================================================
+# Battery
+sketchybar --add item battery right \
+           --set battery \
+                update_freq=60 \
+                icon.font="SF Pro:Bold:16.0" \
+                click_script="open '/System/Library/PreferencePanes/Battery.prefPane'" \
+                script="$CONFIG_DIR/plugins/battery.sh" \
+           --subscribe battery system_woke power_source_change
 
 # Clock
 sketchybar --add item clock right \
            --set clock \
                 update_freq=1 \
-                icon=󰥔 \
-                icon.color=$COLOR_STATUS \
-                background.color=$BG_STATUS \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
+                icon.drawing=off \
+                label.font="SF Pro:Semibold:13.0" \
+                label.color=$LABEL_COLOR \
                 script="$CONFIG_DIR/plugins/clock.sh"
-
-# Battery (クリックでバッテリー設定)
-sketchybar --add item battery right \
-           --set battery \
-                update_freq=120 \
-                icon.color=$COLOR_STATUS \
-                background.color=$BG_STATUS \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open '/System/Library/PreferencePanes/Battery.prefPane'" \
-                script="$CONFIG_DIR/plugins/battery.sh" \
-           --subscribe battery system_woke power_source_change
-
-# Volume (クリックでサウンド設定)
-sketchybar --add item volume right \
-           --set volume \
-                update_freq=5 \
-                icon=󰕾 \
-                icon.color=$COLOR_STATUS \
-                background.color=$BG_STATUS \
-                background.corner_radius=5 \
-                background.height=24 \
-                background.drawing=on \
-                click_script="open '/System/Library/PreferencePanes/Sound.prefPane'" \
-                script="$CONFIG_DIR/plugins/volume.sh" \
-           --subscribe volume volume_change
-
-sketchybar --add bracket status volume battery clock \
-           --set status background.drawing=off
 
 # ============================================================
 # Force update
 # ============================================================
 sketchybar --update
+
+# ============================================================
+# IME watcher: 0.2 秒間隔で im-select を監視し、変化時に
+# input_method_change イベントを発火する。
+# 既存の watcher を停止してから新規起動して重複を防ぐ。
+# ============================================================
+pkill -f "input_method_watcher.sh" 2>/dev/null
+"$CONFIG_DIR/plugins/input_method_watcher.sh" >/dev/null 2>&1 &
+disown

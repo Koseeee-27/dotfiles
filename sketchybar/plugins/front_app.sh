@@ -14,7 +14,7 @@ LAYOUT=$(aerospace list-windows --focused --format "%{window-layout}" 2>/dev/nul
 
 # レイアウト表示用のサフィックス
 case "$LAYOUT" in
-    "floating") LAYOUT_LABEL=" 󰉡" ;;
+    "floating") LAYOUT_LABEL=" 􀂿" ;;
     *) LAYOUT_LABEL="" ;;
 esac
 

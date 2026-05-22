@@ -41,11 +41,11 @@ if [ "$STATE" != "playing" ] || [ -z "$TITLE" ]; then
     exit 0
 fi
 
-# アプリ別アイコン (JetBrainsMono Nerd Font)
+# アプリ別アイコン (SF Symbols)
 case "$APP" in
-    "Spotify") ICON="󰓇" ;;
-    "Music"|"Apple Music") ICON="󰎆" ;;
-    *) ICON="󰎈" ;;
+    "Spotify") ICON="􀊕" ;;
+    "Music"|"Apple Music") ICON="􀫀" ;;
+    *) ICON="􀑪" ;;
 esac
 
 # ラベル整形
