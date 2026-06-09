@@ -102,9 +102,10 @@ sketchybar --add item music center \
            --subscribe music media_change
 
 # ============================================================
-# 右側: IME → Wi-Fi → Volume → Battery → Clock
+# 右側: IME ← Wi-Fi ← Volume ← Battery ← Clock ← Timer
 #   全てフラット（背景なし）。アイコンは SF Symbols で macOS 標準に寄せる。
-#   right セクションは最初に add したものが画面左端に並ぶ。
+#   right セクションは後に add したものが画面左端寄りに並ぶ
+#   （最初に add した IME が画面右端、最後の Timer が画面左寄り）。
 # ============================================================
 
 # IME (日英入力状態)
@@ -154,6 +155,27 @@ sketchybar --add item clock right \
                 label.font="SF Pro:Semibold:13.0" \
                 label.color=$LABEL_COLOR \
                 script="$CONFIG_DIR/plugins/clock.sh"
+
+# Timer (Raycast Timers 連携)
+#   ~/Library/Application Support/com.raycast.macos/extensions/<uuid>/<ISO>---<sec>.timer
+#   を 1 秒間隔で監視し、実行中タイマーが無ければ非表示。
+#   後に add しているので右セクションの中で最も左に配置される。
+sketchybar --add item timer right \
+           --set timer \
+                drawing=off \
+                update_freq=1 \
+                icon.font="SF Pro:Bold:13.0" \
+                icon.color=$LABEL_COLOR \
+                icon.padding_left=2 \
+                icon.padding_right=2 \
+                label.font="SF Mono:Semibold:13.0" \
+                label.color=$LABEL_COLOR \
+                label.padding_left=0 \
+                label.padding_right=4 \
+                padding_left=2 \
+                padding_right=2 \
+                click_script="open 'raycast://extensions/ThatNerd/timers'" \
+                script="$CONFIG_DIR/plugins/timer.sh"
 
 # ============================================================
 # Force update
