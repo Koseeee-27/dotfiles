@@ -92,6 +92,7 @@ export FZF_ALT_C_OPTS="--preview 'ls {}'"
 eval "$(zoxide init zsh)"
 
 # starship
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
 
 # yazi: 終了時にカレントディレクトリへcdする
