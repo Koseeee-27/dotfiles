@@ -11,6 +11,8 @@ config.automatically_reload_config = true
 config.font_size = 13.0
 -- 日本語入力（IME）を有効にする
 config.use_ime = true
+-- 左 Option をmacOS標準の文字合成に使う（JIS配列で Option+¥ → \ を打てるようにする）
+config.send_composed_key_when_left_alt_is_pressed = true
 
 -- ==========================================================================
 -- 見た目の設定
