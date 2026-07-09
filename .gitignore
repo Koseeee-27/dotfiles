@@ -1,5 +1,8 @@
 .DS_Store
 
+# Karabiner が自動生成するバックアップ
+karabiner/automatic_backups/
+
 # OS / editor
 *.swp
 *.swo
