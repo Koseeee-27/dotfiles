@@ -1,2 +1,7 @@
 [ui]
 agent_panel_sort = "spaces"
+
+[experimental]
+# prefix モード中だけ入力ソースを英数レイアウトに切替え、抜けたら元の IME に戻す
+# （日本語 IME が ON のままだと prefix コマンドが効かない問題への対策・macOS 専用）
+switch_ascii_input_source_in_prefix = true
