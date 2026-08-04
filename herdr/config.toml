@@ -1,3 +1,8 @@
+onboarding = false
+
+# prefix キーを ctrl+b から変更（シェルのライン編集 Ctrl+b や Claude Code の task:background との競合回避）
+keys.prefix = "ctrl+q"
+
 [ui]
 agent_panel_sort = "spaces"
 

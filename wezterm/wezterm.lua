@@ -65,17 +65,18 @@ config.colors = {
 -- ==========================================================================
 -- キーバインド設定
 -- ==========================================================================
--- リーダーキー: CTRL+a（この後に続けてキーを押すとコマンドが実行される）
--- 例: CTRL+a → | でペインを横分割
-config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+-- リーダーキー: CTRL+s（この後に続けてキーを押すとコマンドが実行される）
+-- 例: CTRL+s → v でペインを左右分割
+-- CTRL+a はシェルの行頭移動と競合するため使わない（CTRL+s はフロー制御用でシェルではほぼ未使用）
+config.leader = { key = "s", mods = "CTRL", timeout_milliseconds = 1000 }
 
 config.keys = {
 	-- デフォルトの Alt+Enter (ToggleFullScreen) を無効化
 	{ key = "Enter", mods = "ALT", action = wezterm.action.DisableDefaultAssignment },
 
 	-- ペイン分割（画面を分ける）
-	{ key = "v", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) }, -- 左右に分割 (CTRL+a → v)
-	{ key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) }, -- 上下に分割 (CTRL+a → -)
+	{ key = "v", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) }, -- 左右に分割 (CTRL+s → v)
+	{ key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) }, -- 上下に分割 (CTRL+s → -)
 
 	-- ペイン間の移動（Vimと同じhjklキー）
 	{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") }, -- 左のペインへ
