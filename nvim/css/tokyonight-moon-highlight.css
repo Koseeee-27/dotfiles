@@ -1,0 +1,29 @@
+/*
+ * tokyonight moon 風の highlight.js 配色（markdown-preview.nvim 用）
+ * 対応: tokyonight.nvim の treesitter グループ → hljs クラス
+ */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #c8d3f5;            /* fg */
+  background: #1e2030;       /* bg_dark */
+}
+.hljs-comment, .hljs-quote { color: #636da6; font-style: italic; }            /* @comment */
+.hljs-keyword, .hljs-selector-tag { color: #c099ff; }                          /* @keyword: magenta */
+.hljs-subst { color: #c8d3f5; }
+.hljs-number, .hljs-literal { color: #ff966c; }                                /* @number/@boolean: orange */
+.hljs-variable, .hljs-template-variable { color: #c8d3f5; }                    /* @variable: fg */
+.hljs-tag .hljs-attr, .hljs-attribute, .hljs-attr { color: #ffc777; }          /* @attribute: yellow */
+.hljs-string, .hljs-doctag { color: #c3e88d; }                                 /* @string: green */
+.hljs-title, .hljs-section, .hljs-selector-id { color: #82aaff; }              /* @function: blue */
+.hljs-type, .hljs-class .hljs-title { color: #65bcff; }                        /* @type: blue1 */
+.hljs-tag, .hljs-name { color: #ff757f; }                                      /* @tag: red */
+.hljs-regexp, .hljs-link { color: #b4f9f8; }                                   /* @string.regexp: blue6 */
+.hljs-symbol, .hljs-bullet { color: #4fd6be; }                                 /* teal */
+.hljs-built_in, .hljs-builtin-name { color: #ff757f; }                         /* @variable.builtin: red */
+.hljs-meta { color: #89ddff; }                                                 /* @keyword.directive: blue5 */
+.hljs-deletion { background: rgba(226, 106, 117, 0.25); }                      /* git.delete */
+.hljs-addition { background: rgba(184, 219, 135, 0.25); }                      /* git.add */
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }

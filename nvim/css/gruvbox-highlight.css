@@ -1,0 +1,32 @@
+/*
+ * gruvbox 風の highlight.js 配色（markdown-preview.nvim 用）
+ * 対応: gruvbox の Vim ハイライトグループ → hljs クラス
+ *   Statement=red, String=green, Number/Constant=purple, Function=green bold,
+ *   Type=yellow, Identifier=blue, PreProc=aqua, Special=orange, Comment=gray
+ * 色変数は gruvbox-markdown.css 側で定義（light/dark 両方）
+ */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: var(--gb-fg1);
+  background: var(--gb-bg1);
+}
+.hljs-comment, .hljs-quote { color: var(--gb-gray); font-style: italic; }
+.hljs-keyword, .hljs-selector-tag { color: var(--gb-red); }
+.hljs-subst { color: var(--gb-fg1); }
+.hljs-number, .hljs-literal { color: var(--gb-purple); }
+.hljs-variable, .hljs-template-variable { color: var(--gb-blue); }
+.hljs-tag .hljs-attr, .hljs-attribute, .hljs-attr { color: var(--gb-aqua); }
+.hljs-string, .hljs-doctag { color: var(--gb-green); }
+.hljs-title, .hljs-section, .hljs-selector-id { color: var(--gb-green); font-weight: bold; }
+.hljs-type, .hljs-class .hljs-title { color: var(--gb-yellow); }
+.hljs-tag, .hljs-name { color: var(--gb-aqua); }
+.hljs-regexp, .hljs-link { color: var(--gb-orange); }
+.hljs-symbol, .hljs-bullet { color: var(--gb-orange); }
+.hljs-built_in, .hljs-builtin-name { color: var(--gb-orange); }
+.hljs-meta { color: var(--gb-aqua); }
+.hljs-deletion { background: rgba(251, 73, 52, 0.20); }
+.hljs-addition { background: rgba(184, 187, 38, 0.20); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
